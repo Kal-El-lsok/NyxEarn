@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NyxEarn - Earn Real Money</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- AdsGram SDK -->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-avatar" id="sidebarAvatar">🌙</div>
+            <div class="sidebar-name" id="sidebarName">Loading...</div>
+            <div class="sidebar-level">Level <span id="sidebarLevel">1</span></div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item" data-page="home"><i class="fas fa-home"></i> Dashboard</div>
+            <div class="sidebar-item" data-page="profile"><i class="fas fa-user"></i> Profile</div>
+            <div class="sidebar-item" data-page="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</div>
+            <div class="sidebar-item" data-page="history"><i class="fas fa-history"></i> History</div>
+            <div class="sidebar-item" data-page="referrals"><i class="fas fa-users"></i> Referrals</div>
+            <div class="sidebar-item" data-page="settings"><i class="fas fa-cog"></i> Settings</div>
+            <div class="sidebar-item" data-page="support"><i class="fas fa-headset"></i> Support</div>
+        </div>
+        <div class="sidebar-footer">NyxEarn v3.0</div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="app-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+            <div class="top-logo"><span class="logo-icon">🌙</span><span class="logo-text">NYXEARN</span></div>
+            <button class="notify-btn" id="notifyBtn"><i class="fas fa-bell"></i></button>
+        </div>
+
+        <!-- HOME PAGE -->
+        <div id="homePage" class="page active">
+            <div class="balance-card">
+                <div class="balance-header"><span>💰 TOTAL BALANCE</span><i class="fas fa-eye-slash" id="toggleBalance"></i></div>
+                <div class="balance-amount" id="balanceAmount">0</div>
+                <div class="balance-conversion">≈ $<span id="usdValue">0.00</span> USD</div>
+                <div class="balance-stats">
+                    <div class="stat"><span>📈 Today</span><strong id="todayEarned">0</strong></div>
+                    <div class="stat"><span>🔥 Streak</span><strong id="streakDays">0</strong></div>
+                    <div class="stat"><span>⚡ Level</span><strong id="userLevel">1</strong></div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <div class="action-card" data-action="tasks"><div class="action-icon">📋</div><div class="action-title">Tasks</div><div class="action-reward">+30-80</div></div>
+                <div class="action-card" data-action="watch"><div class="action-icon">🎬</div><div class="action-title">Watch Ad</div><div class="action-reward">+8 NYX</div></div>
+                <div class="action-card" data-action="checkin"><div class="action-icon">✅</div><div class="action-title">Check-in</div><div class="action-reward" id="checkinReward">+60</div></div>
+                <div class="action-card" data-action="withdraw"><div class="action-icon">💰</div><div class="action-title">Withdraw</div><div class="action-reward">$10 min</div></div>
+            </div>
+
+            <div class="section-title"><span>🔥 Daily Goal</span><span id="dailyGoalText">0 / 1000 NYX</span></div>
+            <div class="progress-card"><div class="progress-bar"><div class="progress-fill" id="dailyProgressFill"></div></div><div class="bonus-message">Complete 1000 NYX → +100 bonus!</div></div>
+
+            <div class="section-title"><span>📋 Available Tasks</span><a href="#" class="view-all" data-page="tasks">View All →</a></div>
+            <div id="tasksPreview"></div>
+
+            <div class="section-title"><span>🏆 Top Earners</span><a href="#" class="view-all" data-page="leaderboard">Leaderboard →</a></div>
+            <div id="leaderboardPreview"></div>
+            
+            <!-- Task Ad Block (shows tasks from AdsGram) -->
+            <div class="section-title"><span>🎯 Earn More - Special Tasks</span></div>
+            <adsgram-task data-block-id='task-29840' id="adsgram-task-block"></adsgram-task>
+        </div>
+
+        <!-- TASKS PAGE -->
+        <div id="tasksPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>📋 All Tasks</h2></div>
+            <div id="allTasksList" class="tasks-container"></div>
+            <!-- Task Ad Block on Tasks Page -->
+            <div class="section-title" style="margin-top: 20px;">🎯 Complete Special Offers</div>
+            <adsgram-task data-block-id='task-29840'></adsgram-task>
+        </div>
+
+        <!-- WATCH PAGE - Reward Video Ads -->
+        <div id="watchPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>🎬 Watch & Earn</h2></div>
+            <div class="watch-card">
+                <div class="watch-icon">🎥</div>
+                <div class="watch-title">Rewarded Video Ad</div>
+                <div class="watch-reward">+8 NYX ($0.04) per video</div>
+                <button id="watchRewardBtn" class="watch-button"><i class="fas fa-play"></i> WATCH REWARDED AD</button>
+                <div class="watch-note">✅ No daily limit</div>
+                <div class="watch-stats">Today: <span id="watchCount">0</span> videos | <span id="watchEarned">0</span> NYX</div>
+            </div>
+            
+            <!-- Interstitial Ad Button (full screen ads) -->
+            <div class="interstitial-card">
+                <div class="interstitial-icon">📺</div>
+                <div class="interstitial-title">Interstitial Ad</div>
+                <div class="interstitial-reward">+5 NYX per ad</div>
+                <button id="watchInterstitialBtn" class="interstitial-button"><i class="fas fa-tv"></i> SHOW INTERSTITIAL AD</button>
+                <div class="interstitial-note">Full screen ad - shows once</div>
+            </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div id="profilePage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>👤 My Profile</h2></div>
+            <div class="profile-card">
+                <div class="profile-avatar" id="profileAvatar">👤</div>
+                <div class="profile-name" id="profileName">Loading...</div>
+                <div class="profile-userId" id="profileUserId"></div>
+                <div class="level-badge">Level <span id="profileLevel">1</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="levelProgressFill"></div></div>
+                <div class="xp-text" id="nextLevelXp">0 / 1000 XP</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon">🪙</div><div class="stat-value" id="statTotalEarned">0</div><div class="stat-label">Total Earned</div></div>
+                <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value" id="statReferrals">0</div><div class="stat-label">Referrals</div></div>
+                <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-value" id="statJoinDate">Today</div><div class="stat-label">Joined</div></div>
+                <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value" id="statRank">#--</div><div class="stat-label">Rank</div></div>
+            </div>
+            <div class="achievements-section"><h3>🏅 Achievements</h3><div class="achievements-grid" id="achievementsGrid"></div></div>
+        </div>
+
+        <!-- LEADERBOARD PAGE -->
+        <div id="leaderboardPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>🏆 Leaderboard</h2></div>
+            <div id="leaderboardList" class="leaderboard-list"></div>
+        </div>
+
+        <!-- HISTORY PAGE -->
+        <div id="historyPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>📜 Transaction History</h2></div>
+            <div class="history-filters">
+                <button class="history-filter active" data-filter="all">All</button>
+                <button class="history-filter" data-filter="earn">Earnings</button>
+                <button class="history-filter" data-filter="withdraw">Withdrawals</button>
+            </div>
+            <div id="historyList" class="history-list"></div>
+        </div>
+
+        <!-- REFERRALS PAGE -->
+        <div id="referralsPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>👥 Referrals</h2></div>
+            <div class="referral-summary">
+                <div class="referral-stat"><span>Total Referrals</span><strong id="refTotal">0</strong></div>
+                <div class="referral-stat"><span>Coins Earned</span><strong id="refEarned">0</strong></div>
+                <div class="referral-stat"><span>Per Referral</span><strong>+30 NYX</strong></div>
+            </div>
+            <div class="referral-link-card">
+                <div class="referral-link-title">🔗 Your Invite Link</div>
+                <div class="referral-link-box">
+                    <input type="text" id="referralLink" readonly>
+                    <button class="copy-btn" id="copyReferralLink"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+                <div class="referral-bonus-info">Each friend gives you 30 NYX! They get 15 NYX starter bonus.</div>
+            </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="settingsPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>⚙️ Settings</h2></div>
+            <div class="settings-group">
+                <div class="settings-item"><div class="settings-icon"><i class="fas fa-bell"></i></div><div class="settings-info"><div class="settings-title">Notifications</div><div class="settings-desc">Get alerts for earnings</div></div><label class="switch"><input type="checkbox" id="notificationToggle" checked><span class="slider"></span></label></div>
+                <div class="settings-item" id="withdrawSettingsBtn"><div class="settings-icon"><i class="fas fa-dollar-sign"></i></div><div class="settings-info"><div class="settings-title">Withdraw Funds</div><div class="settings-desc">Request payout</div></div><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+
+        <!-- SUPPORT PAGE -->
+        <div id="supportPage" class="page">
+            <div class="page-header"><button class="back-btn" data-page="home"><i class="fas fa-arrow-left"></i></button><h2>🎧 Support</h2></div>
+            <div class="support-options">
+                <div class="support-card" id="supportChatBtn"><i class="fas fa-comment"></i><div>Live Chat</div></div>
+                <div class="support-card" id="supportFaqBtn"><i class="fas fa-question"></i><div>FAQ</div></div>
+            </div>
+            <div id="faqSection" class="faq-section">
+                <div class="faq-item"><div class="faq-question">💰 Minimum withdrawal?</div><div class="faq-answer">2,000 NYX ($10 USD)</div></div>
+                <div class="faq-item"><div class="faq-question">⏱️ Withdrawal time?</div><div class="faq-answer">24-48 hours</div></div>
+                <div class="faq-item"><div class="faq-question">📱 How to earn?</div><div class="faq-answer">Complete tasks and watch ads</div></div>
+            </div>
+            <div class="support-message-box">
+                <textarea id="supportMessage" placeholder="Type your message here..."></textarea>
+                <button id="sendSupportMsg" class="support-send-btn">Send Message</button>
+            </div>
+        </div>
+
+        <!-- WITHDRAW MODAL -->
+        <div id="withdrawModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header"><h3>💰 Withdraw Funds</h3><button class="modal-close">&times;</button></div>
+                <div class="modal-body">
+                    <div class="modal-balance">Balance: <strong id="modalBalance">0</strong> NYX</div>
+                    <div class="withdraw-min">Minimum: 2,000 NYX ($10)<div class="progress-bar"><div class="progress-fill" id="withdrawProgressFill"></div></div></div>
+                    <select id="withdrawMethod">
+                        <option value="usdt">💎 USDT (TRC20)</option>
+                        <option value="bank">🏦 Bank Transfer</option>
+                        <option value="mobile">📱 Mobile Money</option>
+                    </select>
+                    <input type="text" id="withdrawAddress" placeholder="Enter wallet address / account">
+                </div>
+                <div class="modal-footer">
+                    <button class="cancel-btn modal-close">Cancel</button>
+                    <button id="submitWithdrawalBtn" class="submit-btn">Request Withdrawal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="home"><i class="fas fa-home"></i><span>Home</span></div>
+            <div class="nav-item" data-page="tasks"><i class="fas fa-tasks"></i><span>Tasks</span></div>
+            <div class="nav-item" data-page="watch"><i class="fas fa-play-circle"></i><span>Watch</span></div>
+            <div class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></div>
+            <div class="nav-item" data-page="more" id="moreBtn"><i class="fas fa-ellipsis-h"></i><span>More</span></div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <button class="fab" id="fabBtn"><i class="fas fa-plus"></i></button>
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-option" data-action="tasks"><i class="fas fa-tasks"></i> Tasks</div>
+            <div class="fab-option" data-action="watch"><i class="fas fa-play"></i> Watch</div>
+            <div class="fab-option" data-action="checkin"><i class="fas fa-calendar-check"></i> Check-in</div>
+        </div>
+
+        <!-- Toast & Loading -->
+        <div class="toast-container" id="toastContainer"></div>
+        <div class="loading-overlay hidden" id="loadingOverlay"><div class="loading-spinner"></div><div>Processing...</div></div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
